@@ -33,9 +33,10 @@ export default function Home() {
   };
 
   // Búsqueda rápida
-  const handleBusqueda = () => {
-    if (busqueda.trim()) {
-      router.push(`/galeria?busqueda=${encodeURIComponent(busqueda)}`);
+  const handleBusqueda = (valor?: string) => {
+    const texto = valor ?? busqueda;
+    if (texto.trim()) {
+      router.push(`/galeria?busqueda=${encodeURIComponent(texto)}`);
     }
   };
 
@@ -97,29 +98,22 @@ export default function Home() {
         <div className="flex gap-8 items-center">
           {/* Búsqueda rápida */}
           <div className="flex bg-white/90 rounded-full shadow px-6 py-2 items-center max-w-lg w-full mr-6">
-            <div className="flex items-center flex-1">
-              <FaSearch
-                className="text-blue-400"
-                style={{ marginRight: '60px' }} // Ajusta el espacio entre el icono y el input aquí
+            <div className="flex items-center flex-1 w-full">
+              <FaSearch className="text-blue-400 mr-2" />
+              <input
+                type="text"
+                placeholder="Buscar productos o artesanos..."
+                value={busqueda}
+                onChange={e => setBusqueda(e.target.value)}
+                className="flex-1 border-none outline-none bg-transparent text-blue-900"
+                onKeyDown={e => e.key === 'Enter' && handleBusqueda()}
               />
-              <div className="flex items-center gap-2 w-full">
-                <AutoCompleteSearch
-                  tipo={tipoBusqueda}
-                  onSelect={item => {
-                    if (item.nombre) {
-                      router.push(`/productos/${item.id}`)
-                    } else {
-                      router.push(`/artesanos/${item.id}`)
-                    }
-                  }}
-                />
-                <button
-                  onClick={handleBusqueda}
-                  className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-1 rounded-full font-semibold transition"
-                >
-                  Buscar
-                </button>
-              </div>
+              <button
+                onClick={() => handleBusqueda()}
+                className="ml-2 bg-blue-700 hover:bg-blue-800 text-white px-4 py-1 rounded-full font-semibold transition"
+              >
+                Buscar
+              </button>
             </div>
           </div>
           <button

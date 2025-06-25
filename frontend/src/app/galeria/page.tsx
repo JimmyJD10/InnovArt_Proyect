@@ -1,18 +1,33 @@
 'use client'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import { FaStar, FaArrowLeft } from 'react-icons/fa'
+import { FaStar, FaArrowLeft, FaSearch } from 'react-icons/fa'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 export default function GaleriaPage() {
   const [productos, setProductos] = useState<any[]>([])
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const [busqueda, setBusqueda] = useState(searchParams.get('busqueda') || '')
 
   useEffect(() => {
     axios.get('http://localhost:3001/api/products')
       .then(res => setProductos(res.data))
   }, [])
+
+  // Filtra productos si hay búsqueda
+  const productosFiltrados = busqueda
+    ? productos.filter(p =>
+        (p.titulo || '').toLowerCase().includes(busqueda.toLowerCase()) ||
+        (p.descripcion || '').toLowerCase().includes(busqueda.toLowerCase()) ||
+        (p.artesano?.nombre_completo || '').toLowerCase().includes(busqueda.toLowerCase())
+      )
+    : productos
+
+  const handleBusqueda = () => {
+    router.push(`/galeria?busqueda=${encodeURIComponent(busqueda)}`)
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-sky-100 to-blue-200">
@@ -32,11 +47,29 @@ export default function GaleriaPage() {
           <Link href="/galeria" className="text-white font-semibold hover:text-blue-300 transition-colors">GALERÍA</Link>
           <Link href="/contacto" className="text-white font-semibold hover:text-blue-300 transition-colors">CONTACTO</Link>
         </div>
+        {/* Barra de búsqueda igual a la de inicio */}
+        <div className="flex bg-white/90 rounded-full shadow px-6 py-2 items-center max-w-lg w-full ml-8">
+          <FaSearch className="text-blue-400 mr-2" />
+          <input
+            type="text"
+            placeholder="Buscar artesanías, productos o artesanos..."
+            value={busqueda}
+            onChange={e => setBusqueda(e.target.value)}
+            className="flex-1 border-none outline-none bg-transparent text-blue-900"
+            onKeyDown={e => e.key === 'Enter' && handleBusqueda()}
+          />
+          <button
+            onClick={handleBusqueda}
+            className="ml-2 bg-blue-700 hover:bg-blue-800 text-white px-4 py-1 rounded-full font-semibold transition"
+          >
+            Buscar
+          </button>
+        </div>
       </nav>
       <div className="p-6">
         <h2 className="text-2xl font-bold mb-4 text-blue-900">Galería de Artesanías</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {productos.map(p => (
+          {productosFiltrados.map(p => (
             <div key={p.id} className="bg-white rounded-xl shadow p-4 flex flex-col items-center">
               <img src={p.imagen || '/default-artesania.png'} alt={p.titulo} className="h-32 w-full object-cover rounded mb-2" />
               <div className="font-bold text-blue-900">{p.titulo}</div>
@@ -71,6 +104,9 @@ export default function GaleriaPage() {
             </div>
           ))}
         </div>
+        {productosFiltrados.length === 0 && (
+          <div className="text-blue-700 mt-8 text-center">No se encontraron productos para tu búsqueda.</div>
+        )}
       </div>
     </div>
   )

@@ -15,7 +15,13 @@ exports.obtenerResenas = async (req, res) => {
     if (req.query.destacadas === '1' || req.query.destacadas === 'true') {
       where.destacada = true;
     }
-    // Puedes agregar más filtros aquí si lo necesitas
+    // Filtro por productoId o artesanoId
+    if (req.query.productoId) {
+      where.productoId = req.query.productoId;
+    }
+    if (req.query.artesanoId) {
+      where.artesanoId = req.query.artesanoId;
+    }
     const resenas = await Resena.findAll({ where, limit: 10, order: [['createdAt', 'DESC']] });
     // Incluye productoId y artesanoId en la respuesta
     res.json(resenas.map(r => ({
