@@ -22,7 +22,7 @@ exports.obtenerResenas = async (req, res) => {
     if (req.query.artesanoId) {
       where.artesanoId = req.query.artesanoId;
     }
-    const resenas = await Resena.findAll({ where, limit: 10, order: [['createdAt', 'DESC']] });
+    const resenas = await Resena.findAll({ where, limit: 10, order: [['fecha', 'DESC']] });
     // Incluye productoId y artesanoId en la respuesta
     res.json(resenas.map(r => ({
       ...r.toJSON(),

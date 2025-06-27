@@ -8,7 +8,7 @@ export default function AdminProductosPage() {
 
   const fetchProductos = async () => {
     const token = localStorage.getItem('token');
-    const res = await axios.get('http://localhost:3001/api/products', {
+    const res = await axios.get('https://innovart-backend.onrender.com/api/products', {
       headers: { Authorization: `Bearer ${token}` }
     });
     setProductos(res.data);
@@ -18,7 +18,7 @@ export default function AdminProductosPage() {
 
   const handleEliminar = async (id: number) => {
     if (!window.confirm('¿Eliminar este producto?')) return
-    await axios.delete(`http://localhost:3001/api/products/${id}`)
+    await axios.delete(`https://innovart-backend.onrender.com/api/products/${id}`)
     fetchProductos()
   }
 

@@ -11,8 +11,8 @@ export default function AutoCompleteSearch({ tipo, onSelect }: { tipo: 'producto
     setQuery(value)
     if (value.length > 1) {
       const url = tipo === 'productos'
-        ? `http://localhost:3001/api/products/search?q=${encodeURIComponent(value)}`
-        : `http://localhost:3001/api/users/search?q=${encodeURIComponent(value)}`
+        ? `https://innovart-backend.onrender.com/api/products/search?q=${encodeURIComponent(value)}`
+        : `https://innovart-backend.onrender.com/api/users/search?q=${encodeURIComponent(value)}`
       const res = await axios.get(url)
       setResults(res.data)
       setShow(true)

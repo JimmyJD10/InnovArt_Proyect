@@ -45,7 +45,7 @@ export default function PerfilPage() {
       setUser(null);
       return;
     }
-    axios.get('http://localhost:3001/api/users/me', {
+    axios.get('https://innovart-backend.onrender.com/api/users/me', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {

@@ -10,7 +10,7 @@ export default function AdminEstadisticasPage() {
     const fetchStats = async () => {
       const token = localStorage.getItem('token')
       try {
-        const res = await axios.get('http://localhost:3001/api/admin/summary', {
+        const res = await axios.get('https://innovart-backend.onrender.com/api/admin/summary', {
           headers: { Authorization: `Bearer ${token}` }
         })
         setStats(res.data)

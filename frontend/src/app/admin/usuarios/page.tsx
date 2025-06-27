@@ -8,7 +8,7 @@ export default function AdminUsuariosPage() {
 
   const fetchUsuarios = async () => {
     const token = localStorage.getItem('token');
-    const res = await axios.get('http://localhost:3001/api/users', {
+    const res = await axios.get('https://innovart-backend.onrender.com/api/users', {
       headers: { Authorization: `Bearer ${token}` }
     });
     setUsuarios(res.data);
@@ -19,7 +19,7 @@ export default function AdminUsuariosPage() {
   const handleEliminar = async (id: number) => {
     if (!window.confirm('¿Eliminar este usuario?')) return
     const token = localStorage.getItem('token')
-    await axios.delete(`http://localhost:3001/api/users/${id}`, {
+    await axios.delete(`https://innovart-backend.onrender.com/api/users/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     fetchUsuarios()
@@ -27,7 +27,7 @@ export default function AdminUsuariosPage() {
 
   const handleRol = async (id: number, rol: string) => {
     const token = localStorage.getItem('token')
-    await axios.put(`http://localhost:3001/api/users/${id}`, { rol }, {
+    await axios.put(`https://innovart-backend.onrender.com/api/users/${id}`, { rol }, {
       headers: { Authorization: `Bearer ${token}` }
     })
     fetchUsuarios()

@@ -38,7 +38,7 @@ export default function MensajesPage() {
   // Cargar destinatario (artesano)
   useEffect(() => {
     if (destinatarioId) {
-      axios.get(`http://localhost:3001/api/users/${destinatarioId}`)
+      axios.get(`https://innovart-backend.onrender.com/api/users/${destinatarioId}`)
         .then(res => setDestinatario(res.data))
     }
   }, [destinatarioId])
@@ -46,7 +46,7 @@ export default function MensajesPage() {
   // Cargar mensajes entre usuario y destinatario
   useEffect(() => {
     if (user && destinatarioId) {
-      axios.get('http://localhost:3001/api/mensajes')
+      axios.get('https://innovart-backend.onrender.com/api/mensajes')
         .then(res => {
           // Filtra mensajes entre ambos usuarios (bidireccional)
           const conv = res.data.filter((m: Mensaje) =>
@@ -65,14 +65,14 @@ export default function MensajesPage() {
   // Enviar mensaje
   const handleEnviar = async () => {
     if (!nuevoMensaje.trim() || !user || !destinatarioId) return
-    await axios.post('http://localhost:3001/api/mensajes', {
+    await axios.post('https://innovart-backend.onrender.com/api/mensajes', {
       contenido: nuevoMensaje,
       remitenteId: user.id,
       destinatarioId: Number(destinatarioId)
     })
     setNuevoMensaje('')
     // Refresca mensajes
-    axios.get('http://localhost:3001/api/mensajes')
+    axios.get('https://innovart-backend.onrender.com/api/mensajes')
       .then(res => {
         const conv = res.data.filter((m: Mensaje) =>
           (m.remitenteId === user.id && m.destinatarioId === Number(destinatarioId)) ||

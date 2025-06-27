@@ -13,7 +13,7 @@ export default function CarritoPage() {
       setLoading(false)
       return
     }
-    axios.get('http://localhost:3001/api/pedidos/carrito', {
+    axios.get('https://innovart-backend.onrender.com/api/pedidos/carrito', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -30,7 +30,7 @@ export default function CarritoPage() {
 
   const eliminar = async (id: number) => {
     const token = localStorage.getItem('token')
-    await axios.delete(`http://localhost:3001/api/pedidos/carrito/${id}`, {
+    await axios.delete(`https://innovart-backend.onrender.com/api/pedidos/carrito/${id}`, {
       headers: { Authorization: `Bearer ${token}` }
     })
     setCarrito(carrito.filter(i => i.id !== id))

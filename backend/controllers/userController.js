@@ -1,33 +1,60 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { validationResult } = require('express-validator');
 
-// Registro
+// Registro público (solo cliente o artesano)
 exports.crearUsuario = async (req, res) => {
+  // Validación de campos
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errores: errors.array() });
+  }
+  // No permitir admin desde frontend
+  if (req.body.rol && req.body.rol === 'admin') {
+    return res.status(403).json({ mensaje: 'No puedes crear administradores desde el registro público' });
+  }
   try {
-    const { correo, contraseña, rol, ...rest } = req.body;
-    if (rol === 'admin') {
-      return res.status(403).json({ mensaje: 'No puedes crear usuarios admin desde esta ruta' });
+    // Verifica correo único
+    const existe = await User.findOne({ where: { correo: req.body.correo } });
+    if (existe) {
+      return res.status(409).json({ mensaje: 'El correo ya está registrado' });
     }
-    const existe = await User.findOne({ where: { correo } });
-    if (existe) return res.status(400).json({ mensaje: 'Correo ya registrado' });
-    const hash = await bcrypt.hash(contraseña, 10);
-    const user = await User.create({ correo, contraseña: hash, rol, ...rest });
-    res.status(201).json(user);
+    // Encripta contraseña
+    const hash = await bcrypt.hash(req.body.contraseña, 10);
+    const data = { ...req.body, contraseña: hash, rol: req.body.rol === 'artesano' ? 'artesano' : 'cliente' };
+    // Elimina campos no permitidos
+    delete data.confirmar_contraseña;
+    // Crea usuario
+    const user = await User.create(data);
+    res.status(201).json({ mensaje: 'Usuario registrado correctamente', user: { id: user.id, nombre_completo: user.nombre_completo, correo: user.correo, rol: user.rol } });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(400).json({ mensaje: error.message });
   }
 };
 
 // Login
 exports.login = async (req, res) => {
+  // Validación de entrada
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errores: errors.array() });
+  }
   try {
     const { correo, contraseña } = req.body;
     const user = await User.findOne({ where: { correo } });
     if (!user) return res.status(404).json({ mensaje: 'Usuario no encontrado' });
     const valid = await bcrypt.compare(contraseña, user.contraseña);
     if (!valid) return res.status(401).json({ mensaje: 'Contraseña incorrecta' });
-    const token = jwt.sign({ id: user.id, correo: user.correo, rol: user.rol }, process.env.JWT_SECRET || 'secret', { expiresIn: '1d' });
+    // JWT_SECRET debe estar definido en producción
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({ error: 'JWT_SECRET no configurado en el entorno' });
+    }
+    const token = jwt.sign(
+      { id: user.id, correo: user.correo, rol: user.rol },
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
     res.json({ token, user });
   } catch (error) {
     res.status(500).json({ error: error.message });

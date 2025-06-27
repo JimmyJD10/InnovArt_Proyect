@@ -12,7 +12,7 @@ export default function GaleriaPage() {
   const [busqueda, setBusqueda] = useState(searchParams.get('busqueda') || '')
 
   useEffect(() => {
-    axios.get('http://localhost:3001/api/products')
+    axios.get('https://innovart-backend.onrender.com/api/products')
       .then(res => setProductos(res.data))
   }, [])
 

@@ -11,7 +11,7 @@ async function seed() {
     users.push({
       nombre_completo: `Cliente ${i}`,
       correo: `cliente${i}@mail.com`,
-      contraseña: await bcrypt.hash('123456', 10),
+      contraseña: await bcrypt.hash('12345678', 10),
       rol: 'cliente',
       telefono: `9000000${i}`,
       genero: i % 2 === 0 ? 'Masculino' : 'Femenino',
@@ -41,7 +41,7 @@ async function seed() {
     users.push({
       nombre_completo: `Artesano ${i}`,
       correo: `artesano${i}@mail.com`,
-      contraseña: await bcrypt.hash('123456', 10),
+      contraseña: await bcrypt.hash('12345678', 10),
       rol: 'artesano',
       telefono: `9800000${i}`,
       genero: i % 2 === 0 ? 'Femenino' : 'Masculino',

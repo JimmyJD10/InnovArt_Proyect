@@ -15,7 +15,7 @@ export default function EditarPerfil() {
       router.push('/login')
       return
     }
-    axios.get('http://localhost:3001/api/users/me', {
+    axios.get('https://innovart-backend.onrender.com/api/users/me', {
       headers: { Authorization: `Bearer ${token}` }
     })
       .then(res => {
@@ -35,7 +35,7 @@ export default function EditarPerfil() {
   const handleSave = async () => {
     const token = localStorage.getItem('token')
     try {
-      await axios.put(`http://localhost:3001/api/users/${user.id}`, user, {
+      await axios.put(`https://innovart-backend.onrender.com/api/users/${user.id}`, user, {
         headers: { Authorization: `Bearer ${token}` }
       })
       setMsg('Perfil actualizado correctamente')

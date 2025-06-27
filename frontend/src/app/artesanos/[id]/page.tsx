@@ -15,11 +15,11 @@ export default function ArtesanoPerfil() {
 
   useEffect(() => {
     if (id) {
-      axios.get(`http://localhost:3001/api/users/${id}`)
+      axios.get(`https://innovart-backend.onrender.com/api/users/${id}`)
         .then(res => setArtesano(res.data));
-      axios.get(`http://localhost:3001/api/products?usuarioId=${id}`)
+      axios.get(`https://innovart-backend.onrender.com/api/products?usuarioId=${id}`)
         .then(res => setProductos(res.data));
-      axios.get(`http://localhost:3001/api/resenas?artesanoId=${id}`)
+      axios.get(`https://innovart-backend.onrender.com/api/resenas?artesanoId=${id}`)
         .then(res => setResenas(res.data));
     }
   }, [id])

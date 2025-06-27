@@ -33,4 +33,10 @@ app.get('/', (req, res) => {
   res.send('API backend funcionando');
 });
 
+// Middleware global de manejo de errores
+app.use((err, req, res, next) => {
+  console.error('Error global:', err);
+  res.status(err.status || 500).json({ mensaje: err.message || 'Error interno del servidor' });
+});
+
 module.exports = app;

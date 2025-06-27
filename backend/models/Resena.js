@@ -7,6 +7,7 @@ const Resena = sequelize.define('Resena', {
   calificacion: { type: DataTypes.INTEGER },
   clienteId: { type: DataTypes.INTEGER },
   artesanoId: { type: DataTypes.INTEGER },
+  productoId: { type: DataTypes.INTEGER }, // <-- Agregado
   fecha: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
   destacada: {
     type: DataTypes.BOOLEAN,

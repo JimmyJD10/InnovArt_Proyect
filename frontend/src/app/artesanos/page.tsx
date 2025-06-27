@@ -38,7 +38,7 @@ export default function ArtesanosPage() {
   // Fetch artesanos con datos reales del backend
   useEffect(() => {
     setLoading(true)
-    axios.get('http://localhost:3001/api/users?rol=artesano')
+    axios.get('https://innovart-backend.onrender.com/api/users?rol=artesano')
       .then(res => {
         const data = res.data
           .filter((u: any) => u.rol === 'artesano')

@@ -10,12 +10,12 @@ export default function Artesanias() {
   const [artesanoId, setArtesanoId] = useState('');
 
   const fetchResenas = async () => {
-    const res = await axios.get('http://localhost:3001/api/resenas');
+    const res = await axios.get('https://innovart-backend.onrender.com/api/resenas');
     setResenas(res.data);
   };
 
   const handleCrear = async () => {
-    await axios.post('http://localhost:3001/api/resenas', {
+    await axios.post('https://innovart-backend.onrender.com/api/resenas', {
       comentario,
       calificacion: parseInt(calificacion),
       clienteId: parseInt(clienteId),
